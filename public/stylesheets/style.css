@@ -1,0 +1,49 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+table {
+  font-family: Arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+thead {
+  background-color: #875a7b;
+  color: white;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 8px;
+}
+
+th {
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tr:hover {
+  background-color: #ddd;
+}
+
+td:last-child {
+  text-align: center;
+}
+
+td:last-child a {
+  color: #875a7b;
+  text-decoration: none;
+}
+
+td:last-child a:hover {
+  text-decoration: underline;
+}
