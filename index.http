@@ -1,0 +1,7 @@
+GET http://localhost:3000/tickets/crear HTTP/1.1
+
+###
+POST http://localhost:3000/tickets HTTP/2.1
+
+###
+GET http://localhost:3000/tickets/1? HTTP/1.3

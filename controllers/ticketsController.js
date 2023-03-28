@@ -55,7 +55,7 @@ module.exports = {
       ticket.returnId(con, req.params.id, function(err, registro){
         console.log(req.params.id);
         console.log(req.body);
-        res.render('tickets/ver', {Ticket:registro[0]});
+        res.render('tickets/ver', {ticket:registro[0]});
       });
 
     },

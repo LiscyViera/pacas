@@ -19,6 +19,16 @@
 <body class="body">
     <%- include('navbar')%>
 
+    <h1>Detalles del Usuario</h1>
 
+    <p><strong>ID:</strong> <%= ticket.id %></p>
+    <p><strong>Numero de Paca:</strong> <%= ticket.n_paca %></p>
+    <p><strong>Variedad:</strong> <%= ticket.variedad %></p>
+    <p><strong>Fecha de Elaboracion:</strong> <%= ticket.fecha_elaboracion %></p>
+    <p><strong>Gavillas de Funda:</strong> <%= ticket.gavillas_funda %></p>
+    <p><strong>Gavillas de Paca:</strong> <%= ticket.gavillas_paca %></p>
+    <p><strong>Clase:</strong> <%= ticket.clase %></p>
+    <p><strong>Numero de Ticket:</strong> <%= ticket.n_tickets %></p>
+    <p><strong>Resto:</strong> <%= ticket.sobrante %></p>
 </body>
 </html>
