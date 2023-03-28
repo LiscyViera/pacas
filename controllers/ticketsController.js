@@ -86,12 +86,12 @@ module.exports = {
           doc.pipe(res);
           doc.text('N° Paca: ' + registro[0].n_paca);
           doc.text('Variedad: '+ registro[0].variedad);
-          doc.text('Clase: '+ registro[0].clase +'      Tam: '+ registro[0].tamano);
-          doc.text('Peso humedo:____________');
-          doc.text('Peso despalillo:___________');
+          doc.text('Clase: '+ registro[0].clase +'        Tam: '+ registro[0].tamano);
+          doc.text('Peso humedo: ___________');
+          doc.text('Peso despalillo: __________');
           doc.text('Gavillas funda:  ' +registro[0].gavillas_funda);
           doc.text('Gavillas paca:  ' +registro[0].gavillas_paca);
-          doc.text('Maquinista:_________________');
+          doc.text('Maquinista: __________________');
           doc.text('Fecha elaboración: ' + registro[0].fecha_elaboracion.toLocaleDateString('es-ES'));
           doc.text('Prom. Gavillas:' +registro[0].prom_gavillas);
 
@@ -119,7 +119,7 @@ module.exports = {
               }
           });
       });
-      },
+    },
     buscar:function(res) {
         res.render('tickets/buscar');
     },

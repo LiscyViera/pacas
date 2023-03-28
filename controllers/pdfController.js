@@ -22,7 +22,7 @@ exports.generarPDF = (req, res) => {
   doc.text(`Gavillas paca: ${gavillas_paca}`);
   doc.text(`Fecha elaboración: ${fecha_elaboracion}`);
 
-  const barcodeData = nPaca; // aquí se define el valor del código de barras a partir de nPaca
+  const barcodeData = n_paca; // aquí se define el valor del código de barras a partir de nPaca
   bwipjs.toBuffer({
     bcid: 'code128',
     text: barcodeData,
@@ -41,7 +41,7 @@ exports.generarPDF = (req, res) => {
         valign: 'center'
       });
       res.setHeader('Content-Type', 'application/pdf');
-      res.setHeader('Content-Disposition', `attachment; filename="pacas_${nPaca}.pdf"`);
+      res.setHeader('Content-Disposition', `attachment; filename="pacas_${n_paca}.pdf"`);
       doc.pipe(res);
       doc.end();
     }
