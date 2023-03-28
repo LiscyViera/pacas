@@ -99,7 +99,7 @@ module.exports = {
               bcid: 'code128',
               text: barcodeData,
               scale: 1,
-              height: 12,
+              height: 15,
               includetext: false,
               textxalign: 'center'
           }, function(err, png) {
@@ -108,11 +108,11 @@ module.exports = {
               } else {
                   doc.rotate(-90, { origin: [90, 80] });
 
-                  doc.image(png, 80, 170, {
-                      fit: [60, 40],
+                  doc.image(png, 60, 160, {
+                      fit: [80, 40],
                       align: 'center',
                       valign: 'center',
-                      width: 40,
+                      width: 60,
                       height: 60
                   });
                   doc.end();
