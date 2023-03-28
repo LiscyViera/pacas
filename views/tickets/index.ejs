@@ -124,6 +124,9 @@
                             <form class="form-inline" method="get" action="/tickets/<%=ticket1[ticket].id%>" enctype="multipart/form-data">
                                 <button class="btn btn-light" type="submit">Ver</button>
                             </form>
+                            <form class="form-inline" method="get" action="/tickets/codigo-de-barras/<%=ticket1[ticket].id%>" enctype="multipart/form-data">
+                                <button class="btn btn-light" type="submit">Imprimir</button>
+                            </form>
                         </div></td>
                     </tr>
                     <% } %>

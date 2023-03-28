@@ -1,6 +1,10 @@
 var con = require('../config/db');
 var ticket = require('../model/ticket');
 var barcode = require('barcode');
+const PDFDocument = require('pdfkit');
+const bwipjs = require('bwip-js');
+
+
 const ITEMS_PER_PAGE = 10;
 
 module.exports = {
@@ -61,14 +65,60 @@ module.exports = {
 
     },
     generarCodigoDeBarras: function(req, res) {
-        var codigo = req.body.n_paca;
-        var codigoDeBarras = barcode('code128', {
-          data: codigo,
-          width: 400,
-          height: 100,
-        });
-        res.type('png');
-        codigoDeBarras.pipe(res);
+      ticket.returnId(con, req.params.id, function(err, registro) {
+          if (err) {
+              console.error(err);
+              return res.status(500).send('Error al obtener los datos de la base de datos');
+          }
+
+          const barcodeData = registro[0].n_paca; // aquí se define el valor del código de barras a partir del id del registro
+          const doc = new PDFDocument({
+              size: [7.6 * 28.35, 5 * 28.35],
+              margins: {
+                  top: 0.5 * 28.35,
+                  bottom: 0.5 * 28.35,
+                  left: 0.5 * 28.35,
+                  right: 0.5 * 28.35
+              }
+          });
+
+          doc.fontSize(9);
+          doc.pipe(res);
+          doc.text('N° Paca: ' + registro[0].n_paca);
+          doc.text('Variedad: '+ registro[0].variedad);
+          doc.text('Clase: '+ registro[0].clase +'      Tam: '+ registro[0].tamano);
+          doc.text('Peso humedo:____________');
+          doc.text('Peso despalillo:___________');
+          doc.text('Gavillas funda:  ' +registro[0].gavillas_funda);
+          doc.text('Gavillas paca:  ' +registro[0].gavillas_paca);
+          doc.text('Maquinista:_________________');
+          doc.text('Fecha elaboración: ' + registro[0].fecha_elaboracion.toLocaleDateString('es-ES'));
+          doc.text('Prom. Gavillas:' +registro[0].prom_gavillas);
+
+          bwipjs.toBuffer({
+              bcid: 'code128',
+              text: barcodeData,
+              scale: 1,
+              height: 12,
+              includetext: false,
+              textxalign: 'center'
+          }, function(err, png) {
+              if (err) {
+                  console.log(err);
+              } else {
+                  doc.rotate(-90, { origin: [90, 80] });
+
+                  doc.image(png, 80, 170, {
+                      fit: [60, 40],
+                      align: 'center',
+                      valign: 'center',
+                      width: 40,
+                      height: 60
+                  });
+                  doc.end();
+              }
+          });
+      });
       },
     buscar:function(res) {
         res.render('tickets/buscar');
