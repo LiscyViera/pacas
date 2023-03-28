@@ -6,7 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nueva Funda</title>
     <link rel="stylesheet" href="resources/style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+    integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <style>
     .color-btn{
 	    background-color: #00a09d;
@@ -19,9 +22,8 @@
 <body class="body">
     <%- include('navbar')%>
 
-    <h1>Detalles del Usuario</h1>
+    <h1>Detalles de la Paca <%= ticket.id %></h1>
 
-    <p><strong>ID:</strong> <%= ticket.id %></p>
     <p><strong>Numero de Paca:</strong> <%= ticket.n_paca %></p>
     <p><strong>Variedad:</strong> <%= ticket.variedad %></p>
     <p><strong>Fecha de Elaboracion:</strong> <%= ticket.fecha_elaboracion %></p>
@@ -30,5 +32,28 @@
     <p><strong>Clase:</strong> <%= ticket.clase %></p>
     <p><strong>Numero de Ticket:</strong> <%= ticket.n_tickets %></p>
     <p><strong>Resto:</strong> <%= ticket.sobrante %></p>
+
+    <div>
+    <table id="table" class="table">
+      <thead>
+          <tr>
+              <th>Detalles de la Paca <%= ticket.id %></th>
+          </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+        <tr>
+          <th scope="row">Nomero de Paca</th>
+           <td>
+              <%=ticket.n_paca%>
+           </td>
+        <tr>
+          <th scope="row">Variedad</th>
+           <td>
+              <%=ticket.variedad%>
+           </td>
+        </tr>
+      </tbody>
+  </table>
+</div>
 </body>
 </html>
