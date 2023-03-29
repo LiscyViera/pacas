@@ -1,0 +1,43 @@
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+<style>
+  .ch:hover{
+    background-color: #5e3d54;
+  }
+</style>
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #875a7b;">
+        <% if(login){ %>
+        <div class="container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+			<% if (rol == "user" || rol == "super-admin")  { %>	  
+				  <li class="nav-item">
+					<a class="nav-link active text-white ch" aria-current="page" href="/">BULK SEARCH</a>
+				  </li>
+			<%}%>	  
+            <% if (rol == "super-admin")  { %>
+              <li class="nav-item">
+                <a class="nav-link text-white ch" href="/users">USERS</a>
+              </li>
+            <%}%>
+            </ul>
+          </div>
+          <div class="px-5">
+              <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+                <ul class="navbar-nav">
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white ch" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <%= name %>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-ligth" style="background-color:#875a7b; font-weight:bold;" aria-labelledby="navbarDarkDropdownMenuLink">
+                      <li><a class="dropdown-item ch" href="/logout">SALIR</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+          </div>
+        </div>
+        <%}%>
+      </nav>
