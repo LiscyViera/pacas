@@ -40,9 +40,33 @@ module.exports = {
           });
         });
     },
-
+    search: function(req, res) {
+        const page = parseInt(req.query.page) || 1;
+        const query = req.query.q;
+      
+        ticket.buscar(con, query, function(err, datos) {
+          if (err) {
+            console.error(err);
+            return res.status(500).send('Error al buscar los datos en la base de datos');
+          }
+      
+          const totalItems = datos.length;
+          const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+          const startIndex = (page - 1) * ITEMS_PER_PAGE;
+          const endIndex = page * ITEMS_PER_PAGE;
+          const paginatedData = datos.slice(startIndex, endIndex);
+      
+          res.render('search', {
+            title: 'Resultados de búsqueda',
+            ticket1: datos
+        });
+      });
+    },
     crear: function (req, res) {
         res.render('tickets/crear');
+    },
+    buscar:function(req, res) {
+        res.render('tickets/buscar');
     },
     save: function (req, res) {
         ticket.insertar(con, req.body, function (err) {
@@ -119,10 +143,6 @@ module.exports = {
               }
           });
       });
-    },
-    buscar:function(res) {
-        res.render('tickets/buscar');
-    },
-     
+    },   
 }
 

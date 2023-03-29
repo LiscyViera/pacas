@@ -27,57 +27,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/tickets', ticketsRouter);
 
-app.get('/pdf', function (req, res) {
 
-  // Genera el PDF utilizando PDFKit
-  const PDFDocument = require('pdfkit');
-  const bwipjs = require('bwip-js');
-  const doc = new PDFDocument({
-    size: [7.6 * 28.35, 5 * 28.35],
-    margins: {
-      top: 0.5 * 28.35,
-      bottom: 0.5 * 28.35,
-      left: 0.5 * 28.35,
-      right: 0.5 * 28.35
-    }
-  });
-
-  doc.fontSize(9);
-  doc.pipe(res);
-  doc.text('N° Paca:'); 
-  doc.text('Variedad:');
-  doc.text('Clase:                 Tam:');
-  doc.text('Peso humedo:____________');
-  doc.text('Peso despalillo:___________');
-  doc.text('Gavillas funda:');
-  doc.text('Gavillas paca:');
-  doc.text('Maquinista:_________________');
-  doc.text('Fecha elaboración:');
-  doc.text('Prom. Gavillas:');
-
-  const barcodeData = '1234567890'; // aquí se define el valor del código de barras
-  bwipjs.toBuffer({
-    bcid: 'code128',
-    text: barcodeData,
-    scale: 1,
-    height: 12,
-    includetext: false,
-    textxalign: 'center'
-  }, function (err, png) {
-    if (err) {
-      console.log(err);
-    } else {
-      doc.rotate(-90, { origin: [90, 80] });
-     
-      doc.image(png, 80,170, {
-        fit: [60, 40],
-        align: 'center',
-        valign: 'center', width: 40, height: 60 
-      });
-      doc.end();
-    }
-  });
-});
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

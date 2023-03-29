@@ -104,7 +104,8 @@
                         <th>Número de paca</th>
                         <th class="ordenar-descendente">Fecha de elaboración</th>
                         <th>Gavillas Paca</th>
-                        <th>Editar|Imprimir</th>
+                        <th>Editar</th>
+                        <th>Imprimir</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody"></tbody>
@@ -124,6 +125,7 @@
                             <form class="form-inline" method="get" action="/tickets/<%=ticket1[ticket].id%>" enctype="multipart/form-data">
                                 <button class="btn btn-light" type="submit">Ver</button>
                             </form>
+                            <td>
                             <form class="form-inline" method="get" action="/tickets/codigo-de-barras/<%=ticket1[ticket].id%>" enctype="multipart/form-data">
                                 <button class="btn btn-light" type="submit">Imprimir</button>
                             </form>
