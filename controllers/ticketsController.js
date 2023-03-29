@@ -11,61 +11,61 @@ module.exports = {
 
     index: function (req, res,) {
         const page = parseInt(req.query.page) || 1;
-      
+
         ticket.obtener(con, function (err, datos) {
-          if (err) {
-            // manejar el error aquí
-            console.error(err);
-            return res.status(500).send('Error al obtener los datos de la base de datos');
-          }
-      
-          const totalItems = datos.length;
-          const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
-          const startIndex = (page - 1) * ITEMS_PER_PAGE;
-          const endIndex = page * ITEMS_PER_PAGE;
-      
-          const paginatedData = datos.slice(startIndex, endIndex);
-      
-          res.render('tickets/index', {
-            title: 'Aplicación de tickets',
-            ticket1: paginatedData,
-            pageInfo: {
-              currentPage: page,
-              totalPages: totalPages,
-              hasNextPage: endIndex < totalItems,
-              hasPreviousPage: startIndex > 0,
-              nextPage: page + 1,
-              previousPage: page - 1
+            if (err) {
+                // manejar el error aquí
+                console.error(err);
+                return res.status(500).send('Error al obtener los datos de la base de datos');
             }
-          });
+
+            const totalItems = datos.length;
+            const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+            const startIndex = (page - 1) * ITEMS_PER_PAGE;
+            const endIndex = page * ITEMS_PER_PAGE;
+
+            const paginatedData = datos.slice(startIndex, endIndex);
+
+            res.render('tickets/index', {
+                title: 'Aplicación de tickets',
+                ticket1: paginatedData,
+                pageInfo: {
+                    currentPage: page,
+                    totalPages: totalPages,
+                    hasNextPage: endIndex < totalItems,
+                    hasPreviousPage: startIndex > 0,
+                    nextPage: page + 1,
+                    previousPage: page - 1
+                }
+            });
         });
     },
-    search: function(req, res) {
+    search: function (req, res) {
         const page = parseInt(req.query.page) || 1;
         const query = req.query.q;
-      
-        ticket.buscar(con, query, function(err, datos) {
-          if (err) {
-            console.error(err);
-            return res.status(500).send('Error al buscar los datos en la base de datos');
-          }
-      
-          const totalItems = datos.length;
-          const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
-          const startIndex = (page - 1) * ITEMS_PER_PAGE;
-          const endIndex = page * ITEMS_PER_PAGE;
-          const paginatedData = datos.slice(startIndex, endIndex);
-      
-          res.render('search', {
-            title: 'Resultados de búsqueda',
-            ticket1: datos
+
+        ticket.buscar(con, query, function (err, datos) {
+            if (err) {
+                console.error(err);
+                return res.status(500).send('Error al buscar los datos en la base de datos');
+            }
+
+            const totalItems = datos.length;
+            const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+            const startIndex = (page - 1) * ITEMS_PER_PAGE;
+            const endIndex = page * ITEMS_PER_PAGE;
+            const paginatedData = datos.slice(startIndex, endIndex);
+
+            res.render('search', {
+                title: 'Resultados de búsqueda',
+                ticket1: datos
+            });
         });
-      });
     },
     crear: function (req, res) {
         res.render('tickets/crear');
     },
-    buscar:function(req, res) {
+    buscar: function (req, res) {
         res.render('tickets/buscar');
     },
     save: function (req, res) {
@@ -75,74 +75,74 @@ module.exports = {
                 return res.status(500).send('Error al insertar los datos en la base de datos');
             }
             res.redirect('/tickets');
-            
+
         });
 
     },
-    ver: function(req, res){
-      ticket.returnId(con, req.params.id, function(err, registro){
-        if(err) throw err;
-        console.log(req.params.id);
-        console.log(req.body);
-        res.render('tickets/ver', {ticket:registro[0]});
-      });
+    ver: function (req, res) {
+        ticket.returnId(con, req.params.id, function (err, registro) {
+            if (err) throw err;
+            console.log(req.params.id);
+            console.log(req.body);
+            res.render('tickets/ver', { ticket: registro[0] });
+        });
 
     },
-    generarCodigoDeBarras: function(req, res) {
-      ticket.returnId(con, req.params.id, function(err, registro) {
-          if (err) {
-              console.error(err);
-              return res.status(500).send('Error al obtener los datos de la base de datos');
-          }
 
-          const barcodeData = registro[0].n_paca; // aquí se define el valor del código de barras a partir del id del registro
-          const doc = new PDFDocument({
-              size: [7.6 * 28.35, 5 * 28.35],
-              margins: {
-                  top: 0.5 * 28.35,
-                  bottom: 0.5 * 28.35,
-                  left: 0.5 * 28.35,
-                  right: 0.5 * 28.35
-              }
-          });
 
-          doc.fontSize(9);
-          doc.pipe(res);
-          doc.text('N° Paca: ' + registro[0].n_paca);
-          doc.text('Variedad: '+ registro[0].variedad);
-          doc.text('Clase: '+ registro[0].clase +'        Tam: '+ registro[0].tamano);
-          doc.text('Peso humedo: ___________');
-          doc.text('Peso despalillo: __________');
-          doc.text('Gavillas funda:  ' +registro[0].gavillas_funda);
-          doc.text('Gavillas paca:  ' +registro[0].gavillas_paca);
-          doc.text('Maquinista: __________________');
-          doc.text('Fecha elaboración: ' + registro[0].fecha_elaboracion.toLocaleDateString('es-ES'));
-          doc.text('Prom. Gavillas:' +registro[0].prom_gavillas);
+    generarCodigoDeBarras: function (req, res) {
+        ticket.returnId(con, req.params.id, function (err, registro) {
+            if (err) {
+                console.error(err);
+                return res.status(500).send('Error al obtener los datos de la base de datos');
+            }
 
-          bwipjs.toBuffer({
-              bcid: 'code128',
-              text: barcodeData,
-              scale: 1,
-              height: 15,
-              includetext: false,
-              textxalign: 'center'
-          }, function(err, png) {
-              if (err) {
-                  console.log(err);
-              } else {
-                  doc.rotate(-90, { origin: [90, 80] });
+            const doc = new PDFDocument({
+                size: [7.6 * 28.35, 5 * 28.35],
+                margins: {
+                    top: 0.5 * 28.35,
+                    bottom: 0.5 * 28.35,
+                    left: 0.5 * 28.35,
+                    right: 0.5 * 28.35
+                }
+            });
+            doc.fontSize(9);
+            doc.pipe(res);
 
-                  doc.image(png, 60, 160, {
-                      fit: [80, 40],
-                      align: 'center',
-                      valign: 'center',
-                      width: 60,
-                      height: 60
-                  });
-                  doc.end();
-              }
-          });
-      });
-    },   
+            for (let i = 0; i < registro[0].n_tickets; i++) {
+                doc.text('N° Paca: ' + registro[0].n_paca);
+                doc.text('Variedad: ' + registro[0].variedad);
+                doc.text('Clase: ' + registro[0].clase + '        Tam: ' + registro[0].tamano);
+                doc.text('Peso humedo: ___________');
+                doc.text('Peso despalillo: __________');
+                doc.text('Gavillas funda:  ' + registro[0].gavillas_funda);
+                doc.text('Gavillas paca:  ' + registro[0].gavillas_paca);
+                doc.text('Maquinista: __________________');
+                doc.text('Fecha elaboración: ' + registro[0].fecha_elaboracion.toLocaleDateString('es-ES'));
+                doc.text('Prom. Gavillas:' + registro[0].prom_gavillas);
+                if (i === registro[0].n_tickets - 1 && registro[0].sobrante !== 0) {
+                    doc.addPage();
+                    doc.text('N° Paca: ' + registro[0].n_paca);
+                    doc.text('Variedad: ' + registro[0].variedad);
+                    doc.text('Clase: ' + registro[0].clase + '        Tam: ' + registro[0].tamano);
+                    doc.text('Peso humedo: ___________');
+                    doc.text('Peso despalillo: __________');
+                    doc.text('Gavillas funda:  ' + registro[0].sobrante);
+                    doc.text('Gavillas paca:  ' + registro[0].gavillas_paca);
+                    doc.text('Maquinista: __________________');
+                    doc.text('Fecha elaboración: ' + registro[0].fecha_elaboracion.toLocaleDateString('es-ES'));
+                    doc.text('Prom. Gavillas:' + registro[0].prom_gavillas);
+                }
+
+                if (i < registro[0].n_tickets - 1) {
+                    doc.addPage();
+                } else {
+                    doc.end();
+                };
+            };
+        });
+    },
+
+
 }
 
