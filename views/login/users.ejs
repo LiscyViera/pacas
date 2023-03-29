@@ -61,23 +61,40 @@
                             <th scope="col">ACCION</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <% if(typeof users != 'undefined') {%>
-                        <%users.forEach((user) => {%>
+                    <tbody id="tableBody">
+
+                    <% for( let usuario=0; usuario < usuario1.length; usuario++ ) { %>
                         <tr>
-                            <td><%= user.id %></td>
-                            <td><%= user.user %></td>
-                            <td><%= user.name %></td>
-                            <td><%= user.rol %></td>
                             <td>
-                                <a href="/edit/<%=user.id%>"><button class="btn color-btn text-white"><i class="fa fa-edit"></i></button></a>
-                                <a href="/delete/<%=user.id%>"><button class="btn btn-danger"><i class="fa fa-trash"></i></button></a>
+                                <%=usuario1[usuario].id%>
                             </td>
                         </tr>
-                        <%})%> 
-                        <%}%>
-                    </tbody>
+                        <% } %>
+                            </tbody>
                 </table>
+
+                <div class="pagination">
+                    <% if (pageInfo.hasPreviousPage) { %>
+                      <a href="?page=<%= pageInfo.previousPage %>">Anterior</a>
+                    <% } else { %>
+                      <span class="disabled">Anterior   </span>
+                    <% } %>
+                  
+                    <% for (let i = pageInfo.startPage; i <= pageInfo.endPage; i++) { %>
+                      <% if (i === pageInfo.currentPage) { %>
+                        <span class="current"><%= i %></span>
+                      <% } else { %>
+                        <a href="?page=<%= i %>"><%= i %></a>
+                      <% } %>
+                    <% } %>
+                    <% if (pageInfo.hasNextPage) { %>
+                      <a href="?page=<%= pageInfo.nextPage %>">Siguiente</a>
+                    <% } else { %>
+                      <span class="disabled">Siguiente</span>
+                    <% } %>
+                  </div>
+                  
+            </div>
             </div>
         </div>
     </div>

@@ -9,14 +9,14 @@ module.exports = {
         }
     },
 
-    // obtener: function (conexion, funcion) {
-    //     conexion.query('SELECT * FROM users ORDER BY id ASDC', (error, resultados) => {
-    //         if (error) {
-    //             return funcion(error, null);
-    //         } else{
-    //             return funcion(null, resultados);
-    //         }
-    //     });
-    // },
+    obtener: function (conexion, funcion) {
+        conexion.query('SELECT * FROM users ORDER BY id ASDC', (error, resultados) => {
+            if (error) {
+                return funcion(error, null);
+            } else{
+                return funcion(null, resultados);
+            }
+        });
+    },
 
 }
