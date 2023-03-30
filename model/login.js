@@ -10,13 +10,21 @@ module.exports = {
     },
 
     obtener: function (conexion, funcion) {
-        conexion.query('SELECT * FROM users ORDER BY id ASDC', (error, resultados) => {
+        conexion.query('SELECT * FROM prueba_db.users', (error, resultados) => {
             if (error) {
                 return funcion(error, null);
             } else{
                 return funcion(null, resultados);
             }
         });
+    },
+
+    borrar: function(conexion, id) {
+        conexion.query('DELETE FROM users WHERE id=?',[id]);
+    },
+
+    auth: function(conexion, ){
+
     },
 
 }
