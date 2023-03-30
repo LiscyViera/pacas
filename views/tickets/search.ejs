@@ -11,7 +11,7 @@
         integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
         integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-   
+
 
 
     <style>
@@ -64,6 +64,7 @@
         td:last-child a:hover {
             text-decoration: underline;
         }
+
         .pagination {
             display: inline-block;
         }
@@ -73,6 +74,7 @@
             justify-content: center;
             margin-top: 20px;
         }
+
         .page-link {
             display: block;
             padding: 10px;
@@ -81,6 +83,7 @@
             text-decoration: none;
             color: #333;
         }
+
         .page-link.active {
             background-color: #ccc;
             color: #fff;
@@ -92,71 +95,57 @@
     <%- include('navbar')%>
 
         <div class="container">
-            <br><h5 style="color: dimgrey;">Etiquetas gavillas fundas</h5> 
-
-           
-            <a style="background-color: #00a09d; color: white;" class="btn"href="/tickets/crear">Crear</a>
+            <br>
+            <h5 style="color: dimgrey;">Etiquetas de la paca <%=ticket1[0].n_paca%></h5>
             <br>
             <br>
             <table id="table">
+
                 <thead>
                     <tr>
-                        <th>Número de paca</th>
                         <th class="ordenar-descendente">Fecha de elaboración</th>
-                        <th>Gavillas Paca</th>
-                        <th></th>
+                        <th>Cantidad de gavillas funda</th>
+                        <th> </th>
                         <th>Imprimir</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody"></tbody>
 
-                <% for( let ticket=0; ticket < ticket1.length; ticket++ ) { %>
+                <% for (let ticket=0; ticket < ticket1.length; ticket++) { %>
                     <tr>
-                        <td>
-                            <%=ticket1[ticket].n_paca%>
+                    
+                        <td><%= new Date(ticket1[ticket].fecha_elaboracion).toLocaleDateString('es-ES') %>
+                          
                         </td>
                         <td>
-                            <%=ticket1[ticket].fecha_elaboracion%>
+                            <%= ticket1[ticket].gavillas_funda %>
                         </td>
                         <td>
-                            <%=ticket1[ticket].gavillas_paca%>
+                            <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
+                                <form class="form-inline" method="get" action="/tickets/<%=ticket1[ticket].id%>"
+                                    enctype="multipart/form-data">
+                                    <button class="btn btn-light" type="submit">Ver</button>
+                                </form>
                         </td>
-                        <td> <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
-                            <form class="form-inline" method="get" action="/tickets/<%=ticket1[ticket].id%>" enctype="multipart/form-data">
-                                <button class="btn btn-light" type="submit">Ver</button>
-                            </form>
-                            <td>
-                            <form class="form-inline" method="get" action="/tickets/codigo-de-barras/<%=ticket1[ticket].id%>" enctype="multipart/form-data">
+                        <td>
+                            <form class="form-inline" method="get"
+                                action="/tickets/codigo-de-barras/<%=ticket1[ticket].id%>"
+                                enctype="multipart/form-data">
                                 <button class="btn btn-light" type="submit">Imprimir</button>
                             </form>
-                        </div></td>
-                    </tr>
-                    <% } %>
-                        </tbody>
-            </table>
-           
-            <div class="pagination">
-                <% if (pageInfo.hasPreviousPage) { %>
-                  <a href="?page=<%= pageInfo.previousPage %>">Anterior</a>
-                <% } else { %>
-                  <span class="disabled">Anterior   </span>
-                <% } %>
-              
-                <% for (let i = pageInfo.startPage; i <= pageInfo.endPage; i++) { %>
-                  <% if (i === pageInfo.currentPage) { %>
-                    <span class="current"><%= i %></span>
-                  <% } else { %>
-                    <a href="?page=<%= i %>"><%= i %></a>
-                  <% } %>
-                <% } %>
-                <% if (pageInfo.hasNextPage) { %>
-                  <a href="?page=<%= pageInfo.nextPage %>">Siguiente</a>
-                <% } else { %>
-                  <span class="disabled">Siguiente</span>
-                <% } %>
-              </div>
-              
         </div>
+        </td>
+        </tr>
+        <% } %>
+
+            </tbody>
+            </table>
+            </tbody>
+            </table>
+
+
+
+
 </body>
 
 </html>

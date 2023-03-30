@@ -27,6 +27,10 @@ module.exports={
 
     returnId:function(con, id, funcion){
         con.query('SELECT * FROM ticket_gavilla Where id= ?',[id], funcion);
+    },
+    returnPaca:function(con, q, funcion){
+        con.query('SELECT * FROM ticket_gavilla WHERE n_paca = ?', [q], funcion);
+
     }
       
 }

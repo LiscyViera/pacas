@@ -63,7 +63,7 @@ app.get('/pdf', function (req, res) {
 
   doc.fontSize(9);
   doc.pipe(res);
-  doc.text('N° Paca:');
+  doc.text('N° Paca:'); 
   doc.text('Variedad:');
   doc.text('Clase:                 Tam:');
   doc.text('Peso humedo:____________');
@@ -87,16 +87,16 @@ app.get('/pdf', function (req, res) {
       console.log(err);
     } else {
       doc.rotate(-90, { origin: [90, 80] });
-
-      doc.image(png, 80, 170, {
+     
+      doc.image(png, 80,170, {
         fit: [60, 40],
         align: 'center',
-        valign: 'center', width: 40, height: 60
+        valign: 'center', width: 40, height: 60 
       });
       doc.end();
     }
   });
-}),
+});
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
