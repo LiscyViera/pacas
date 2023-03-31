@@ -96,9 +96,10 @@ module.exports = {
             });
             doc.fontSize(9);
             doc.pipe(res);
-
+            
+            //res.setHeader('Content-disposition', 'attachment; filename=pacas.pdf');
             for (let i = 0; i < registro[0].n_tickets; i++) {
-                
+               
                 doc.text('N° Paca: ' + registro[0].n_paca);
                 doc.text('Variedad: ' + registro[0].variedad);
                 doc.text('Clase: ' + registro[0].clase + '        Tam: ' + registro[0].tamano);
@@ -135,7 +136,6 @@ module.exports = {
                         console.log('Código de barras generado correctamente');
                     }
                 });
-                
                 if (i === registro[0].n_tickets - 1 && registro[0].sobrante !== 0) {
                     doc.addPage();
                     doc.text('N° Paca: ' + registro[0].n_paca);
