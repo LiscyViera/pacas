@@ -27,7 +27,7 @@ module.exports = {
             const paginatedData = datos.slice(startIndex, endIndex);
 
             res.render('tickets/index', {
-                
+
                 ticket1: paginatedData,
                 pageInfo: {
                     currentPage: page,
@@ -47,15 +47,15 @@ module.exports = {
         res.render('tickets/buscar');
     },
 
-    searchTickets:function(req, res){
+    searchTickets: function (req, res) {
         ticket.returnPaca(con, req.query.q, function (err, registro) {
-          if (err) throw err;
-         
-          console.log(req.query.q);
-          res.render('tickets/search', {ticket1: registro });
+            if (err) throw err;
+
+            console.log(req.query.q);
+            res.render('tickets/search', { ticket1: registro });
         });
-      },
-      
+    },
+
     save: function (req, res) {
         ticket.insertar(con, req.body, function (err) {
             if (err) {
@@ -84,78 +84,95 @@ module.exports = {
                 console.error(err);
                 return res.status(500).send('Error al obtener los datos de la base de datos');
             }
-
-            const doc = new PDFDocument({
-                size: [7.6 * 28.35, 5 * 28.35],
-                margins: {
-                    top: 0.5 * 28.35,
-                    bottom: 0.5 * 28.35,
-                    left: 0.5 * 28.35,
-                    right: 0.5 * 28.35
-                }
-            });
-            doc.fontSize(9);
-            doc.pipe(res);
-            
-            //res.setHeader('Content-disposition', 'attachment; filename=pacas.pdf');
-            for (let i = 0; i < registro[0].n_tickets; i++) {
-               
-                doc.text('N° Paca: ' + registro[0].n_paca);
-                doc.text('Variedad: ' + registro[0].variedad);
-                doc.text('Clase: ' + registro[0].clase + '        Tam: ' + registro[0].tamano);
-                doc.text('Peso humedo: ___________');
-                doc.text('Peso despalillo: __________');
-                doc.text('Gavillas funda:  ' + registro[0].gavillas_funda);
-                doc.text('Gavillas paca:  ' + registro[0].gavillas_paca);
-                doc.text('Maquinista: __________________');
-                doc.text('Fecha elaboración: ' + registro[0].fecha_elaboracion.toLocaleDateString('es-ES'));
-                doc.text('Prom. Gavillas:' + registro[0].prom_gavillas);  
                 const text = registro[0].n_paca;
                 const bcid = 'code128'; // tipo de código de barras que se generará
-                const scale = 3; // escala del código de barras
+                const scale = 1; // escala del código de barras
                 const height = 10; // altura del código de barras
+                const includetext = true;
+                const textxalign = 'center';
+              
+                // Genera el código de barras en una promise para una ves generado no exista problema
+                const bar = new Promise((resolve, reject) => {
+                    bwipjs.toBuffer({
+                        bcid,
+                        text,
+                        scale,
+                        height,
+                        includetext,
+                        textxalign,
+                    }, (err, png) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(png);
+                        }
+                    });
+                })
                 
-                // Genera el código de barras
-                bwipjs.toBuffer({
-                    bcid,
-                    text,
-                    scale,
-                    height,
-                }, (err, png) => {
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        // Guarda el código de barras generado en un archivo png
-                       
-                        doc.image(png, {
-                            fit: [150, 150], // Tamaño del código de barras
-                            align: 'center', // Alinear el código de barras en el centro de la página
-                            valign: 'center' // Alinear el código de barras verticalmente en el centro de la página
-                        });
-                        
-                        console.log('Código de barras generado correctamente');
-                    }
-                });
-                if (i === registro[0].n_tickets - 1 && registro[0].sobrante !== 0) {
-                    doc.addPage();
-                    doc.text('N° Paca: ' + registro[0].n_paca);
-                    doc.text('Variedad: ' + registro[0].variedad);
-                    doc.text('Clase: ' + registro[0].clase + '        Tam: ' + registro[0].tamano);
-                    doc.text('Peso humedo: ___________');
-                    doc.text('Peso despalillo: __________');
-                    doc.text('Gavillas funda:  ' + registro[0].sobrante);
-                    doc.text('Gavillas paca:  ' + registro[0].gavillas_paca);
-                    doc.text('Maquinista: __________________');
-                    doc.text('Fecha elaboración: ' + registro[0].fecha_elaboracion.toLocaleDateString('es-ES'));
-                    doc.text('Prom. Gavillas:' + registro[0].prom_gavillas);
-                }
+                //invocamos a la promesa
+                bar.then((png) => {
+                    //crearemos la instancia del pdf dentro de la promesa ya que generar la instancia del PDF
+                    //fuera de la promisa y luego insertar un doc.text hace que la instancia del PDF finalice
+                    //antes de que la promesa entre en accion
+                    const doc = new PDFDocument({
+                        size: [7.6 * 28.35, 5 * 28.35],
+                        margins: {
+                            top: 0.5 * 28.35,
+                            bottom: 0.5 * 28.35,
+                            left: 0.5 * 28.35,
+                            right: 0.5 * 28.35
+                        }
+                    });
+                    
+                    // Aumenta el límite de escuchadores de eventos para el objeto res
+                    res.setMaxListeners(registro[0].n_tickets + 1);
 
-                if (i < registro[0].n_tickets - 1) {
-                    doc.addPage();
-                } else {
-                    doc.end();
-                };
-            };
+                    //declaramos el pipe aqui para que no genere error
+                    doc.pipe(res);
+                    //insertamos el for dpara recorrer el numero de tickets
+                    for (let i = 0; i < registro[0].n_tickets; i++) {
+                        
+                        //generamos los datos de tickes
+                        doc.fontSize(8);
+                        
+                        doc.text('N° Paca: ' + registro[0].n_paca);
+                        doc.text('Variedad: ' + registro[0].variedad);
+                        doc.text('Clase: ' + registro[0].clase + '        Tam: ' + registro[0].tamano);
+                        doc.text('Peso humedo: ___________');
+                        doc.text('Peso despalillo: __________');
+                        doc.text('Gavillas funda:  ' + registro[0].gavillas_funda);
+                        doc.text('Gavillas paca:  ' + registro[0].gavillas_paca);
+                        doc.text('Maquinista: __________________');
+                        doc.text('Fecha elaboración: ' + registro[0].fecha_elaboracion.toLocaleDateString('es-ES'));
+                        doc.text('Prom. Gavillas:' + registro[0].prom_gavillas);
+                        doc.image(png, {fit: [60, 40],align: 'center',valign: 'center'});
+                        
+                        //este codigo lo unico que me hace es que si son 9 tickes me imprime 10 no se porque va
+                        if (i === registro[0].n_tickets - 1 && registro[0].sobrante !== 0) {
+                            doc.addPage();
+                            doc.text('N° Paca: ' + registro[0].n_paca);
+                            doc.text('Variedad: ' + registro[0].variedad);
+                            doc.text('Clase: ' + registro[0].clase + '        Tam: ' + registro[0].tamano);
+                            doc.text('Peso humedo: ___________');
+                            doc.text('Peso despalillo: __________');
+                            doc.text('Gavillas funda:  ' + registro[0].sobrante);
+                            doc.text('Gavillas paca:  ' + registro[0].gavillas_paca);
+                            doc.text('Maquinista: __________________');
+                            doc.text('Fecha elaboración: ' + registro[0].fecha_elaboracion.toLocaleDateString('es-ES'));
+                            doc.text('Prom. Gavillas:' + registro[0].prom_gavillas);
+                            doc.image(png, {fit: [60, 40],align: 'center',valign: 'center'});
+                        }
+        
+                        //validamos si es el ultimo ciclo finalizar, si no lo es agregar otra pagina
+                        if (i < registro[0].n_tickets - 1) {
+                            doc.addPage();
+                        } else {
+                            doc.end();
+                        };
+                    }
+                }).catch((err) => {
+                    console.error(err);
+                });
         });
     },
 
