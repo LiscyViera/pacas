@@ -84,95 +84,100 @@ module.exports = {
                 console.error(err);
                 return res.status(500).send('Error al obtener los datos de la base de datos');
             }
-                const text = registro[0].n_paca;
-                const bcid = 'code128'; // tipo de código de barras que se generará
-                const scale = 1; // escala del código de barras
-                const height = 10; // altura del código de barras
-                const includetext = true;
-                const textxalign = 'center';
-              
-                // Genera el código de barras en una promise para una ves generado no exista problema
-                const bar = new Promise((resolve, reject) => {
-                    bwipjs.toBuffer({
-                        bcid,
-                        text,
-                        scale,
-                        height,
-                        includetext,
-                        textxalign,
-                    }, (err, png) => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            resolve(png);
-                        }
-                    });
-                })
-                
-                //invocamos a la promesa
-                bar.then((png) => {
-                    //crearemos la instancia del pdf dentro de la promesa ya que generar la instancia del PDF
-                    //fuera de la promisa y luego insertar un doc.text hace que la instancia del PDF finalice
-                    //antes de que la promesa entre en accion
-                    const doc = new PDFDocument({
-                        size: [7.6 * 28.35, 5 * 28.35],
-                        margins: {
-                            top: 0.5 * 28.35,
-                            bottom: 0.5 * 28.35,
-                            left: 0.5 * 28.35,
-                            right: 0.5 * 28.35
-                        }
-                    });
-                    
-                    // Aumenta el límite de escuchadores de eventos para el objeto res
-                    res.setMaxListeners(registro[0].n_tickets + 1);
+            const text = registro[0].n_paca;
+            const bcid = 'code128'; // tipo de código de barras que se generará
+            const scale = 1; // escala del código de barras
+            const height = 13; // altura del código de barras
+            const includetext = false;
+            const textxalign = 'center';
 
-                    //declaramos el pipe aqui para que no genere error
-                    doc.pipe(res);
-                    //insertamos el for dpara recorrer el numero de tickets
-                    for (let i = 0; i < registro[0].n_tickets; i++) {
-                        
-                        //generamos los datos de tickes
-                        doc.fontSize(8);
-                        
+            // Genera el código de barras en una promise para una ves generado no exista problema
+            const bar = new Promise((resolve, reject) => {
+                bwipjs.toBuffer({
+                    bcid,
+                    text,
+                    scale,
+                    height,
+                    includetext,
+                    textxalign,
+                }, (err, png) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(png);
+                    }
+                });
+            })
+
+            //invocamos a la promesa
+            bar.then((png) => {
+                //crearemos la instancia del pdf dentro de la promesa ya que generar la instancia del PDF
+                //fuera de la promisa y luego insertar un doc.text hace que la instancia del PDF finalice
+                //antes de que la promesa entre en accion
+                const doc = new PDFDocument({
+                    size: [7.6 * 28.35, 5 * 28.35],
+                    margins: {
+                        top: 0.5 * 28.35,
+                        bottom: 0.5 * 28.35,
+                        left: 0.5 * 28.35,
+                        right: 0.5 * 28.35
+                    }
+                });
+
+                // Aumenta el límite de escuchadores de eventos para el objeto res
+                res.setMaxListeners(registro[0].n_tickets + 1);
+
+                //declaramos el pipe aqui para que no genere error
+                doc.pipe(res);
+                //insertamos el for dpara recorrer el numero de tickets
+                for (let i = 0; i < registro[0].n_tickets; i++) {
+
+                    //generamos los datos de tickes
+                    doc.fontSize(9);
+
+                    doc.text('N° Paca: ' + registro[0].n_paca);
+                    doc.text('Variedad: ' + registro[0].variedad);
+                    doc.text('Clase: ' + registro[0].clase + '        Tam: ' + registro[0].tamano);
+                    doc.text('Peso humedo: ___________');
+                    doc.text('Peso despalillo: __________');
+                    doc.text('Gavillas funda:  ' + registro[0].gavillas_funda);
+                    doc.text('Gavillas paca:  ' + registro[0].gavillas_paca);
+                    doc.text('Maquinista: __________________');
+                    doc.text('Fecha elaboración: ' + registro[0].fecha_elaboracion.toLocaleDateString('es-ES'));
+                    doc.text('Prom. Gavillas:' + registro[0].prom_gavillas);
+                     // Calculamos la posición y de la imagen para que se centre verticalmente en la página
+                     const y = (doc.page.height - doc.page.margins.bottom - doc.page.margins.top - 40) / 2 + doc.page.margins.top;
+                     doc.image(png, doc.page.width - doc.page.margins.right - 60, y, { fit: [60, 40], align: 'center', valign: 'center' });
+
+                    if (i === registro[0].n_tickets - 1 && registro[0].sobrante !== 0) {
+                        doc.addPage();
                         doc.text('N° Paca: ' + registro[0].n_paca);
                         doc.text('Variedad: ' + registro[0].variedad);
                         doc.text('Clase: ' + registro[0].clase + '        Tam: ' + registro[0].tamano);
                         doc.text('Peso humedo: ___________');
                         doc.text('Peso despalillo: __________');
-                        doc.text('Gavillas funda:  ' + registro[0].gavillas_funda);
+                        doc.text('Gavillas funda:  ' + registro[0].sobrante);
                         doc.text('Gavillas paca:  ' + registro[0].gavillas_paca);
                         doc.text('Maquinista: __________________');
                         doc.text('Fecha elaboración: ' + registro[0].fecha_elaboracion.toLocaleDateString('es-ES'));
                         doc.text('Prom. Gavillas:' + registro[0].prom_gavillas);
-                        doc.image(png, {fit: [60, 40],align: 'center',valign: 'center'});
-                        
-                        //este codigo lo unico que me hace es que si son 9 tickes me imprime 10 no se porque va
-                        if (i === registro[0].n_tickets - 1 && registro[0].sobrante !== 0) {
-                            doc.addPage();
-                            doc.text('N° Paca: ' + registro[0].n_paca);
-                            doc.text('Variedad: ' + registro[0].variedad);
-                            doc.text('Clase: ' + registro[0].clase + '        Tam: ' + registro[0].tamano);
-                            doc.text('Peso humedo: ___________');
-                            doc.text('Peso despalillo: __________');
-                            doc.text('Gavillas funda:  ' + registro[0].sobrante);
-                            doc.text('Gavillas paca:  ' + registro[0].gavillas_paca);
-                            doc.text('Maquinista: __________________');
-                            doc.text('Fecha elaboración: ' + registro[0].fecha_elaboracion.toLocaleDateString('es-ES'));
-                            doc.text('Prom. Gavillas:' + registro[0].prom_gavillas);
-                            doc.image(png, {fit: [60, 40],align: 'center',valign: 'center'});
-                        }
-        
-                        //validamos si es el ultimo ciclo finalizar, si no lo es agregar otra pagina
-                        if (i < registro[0].n_tickets - 1) {
-                            doc.addPage();
-                        } else {
-                            doc.end();
-                        };
+
+
+                        // Calculamos la posición y de la imagen para que se centre verticalmente en la página
+                        const y = (doc.page.height - doc.page.margins.bottom - doc.page.margins.top - 40) / 2 + doc.page.margins.top;
+                        doc.image(png, doc.page.width - doc.page.margins.right - 60, y, { fit: [60, 40], align: 'center', valign: 'center' });
                     }
-                }).catch((err) => {
-                    console.error(err);
-                });
+
+                    //validamos si es el ultimo ciclo finalizar, si no lo es agregar otra pagina
+                    if (i < registro[0].n_tickets - 1) {
+                        doc.addPage();
+                    } else {
+                        doc.end();
+                    };
+                }
+            }).catch((err) => {
+                console.error(err);
+            });
         });
     },
 
