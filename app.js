@@ -36,16 +36,6 @@ app.use('/users', usersRouter);
 app.use('/tickets', ticketsRouter);
 app.use('/', loginRouter);
 
-app.get('/', (req, res) => {
-	if (req.session.loggedin) {
-		let name = req.session.name;
-
- 		res.render('home', { name });
-	} else {
-		res.redirect('/login');
-	}
-});
-
 app.get('/pdf', function (req, res) {
 
   // Genera el PDF utilizando PDFKit

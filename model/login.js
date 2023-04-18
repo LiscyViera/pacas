@@ -23,8 +23,4 @@ module.exports = {
         conexion.query('DELETE FROM users WHERE id=?',[id]);
     },
 
-    auth: function(conexion, ){
-
-    },
-
 }

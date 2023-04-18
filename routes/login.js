@@ -1,11 +1,11 @@
 const express = require('express');
 var router = express.Router();
 const loginController = require('../controllers/loginController');
-const bcrypt = require('bcrypt');
-const con = require('../config/db');
-const { index } = require('../controllers/ticketsController');
-const rp = require('request-promise');
-var ticket = require('../model/ticket');
+// const bcrypt = require('bcrypt');
+// const con = require('../config/db');
+// const session = require('express-session');
+// const flash = require('connect-flash');
+// const User = require('../config/db');
 
 //Registro de usuarios
 router.get('/', loginController.index);
@@ -15,93 +15,68 @@ router.get('/ver', loginController.ver);
 // router.post('/edit/:id', loginController.edit);
 router.get('/delete/:id', loginController.borrar)
 
-//Autenticacion de usuarios
+// router.use(session({
+//   secret: 'mysecretkey',
+//   resave: false,
+//   saveUninitialized: true
+// }));
 
-router.post('/login', async (req, res) => {
-    const user = req.body.user;
-    const password = req.body.password;
-    if (user === user && password === password) {
-        req.session.loggedin = true;
-        req.session.user = user;
-        // req.session.rol = rol;
+// //Autenticacion de usuarios
+// router.use(flash());
 
-        const page = 1; // cambiar a la página que necesites
-        const ITEMS_PER_PAGE = 10; // o el valor que tengas definido en tu controlador
+// router.get('/login', function (req, res) {
+//   res.render('login/login', { message: req.flash('message') });
+// });
 
-        const options = {
-            uri: 'http://localhost:3000/tickets',
-            qs: {
-                page: 1 // cambiar a la página que necesites
-            },
-            json: true
-        };
-    
-        const tickets = await rp(options);
-        const totalItems = tickets.length;
-        const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
-        const startIndex = (page - 1) * ITEMS_PER_PAGE;
-        const endIndex = page * ITEMS_PER_PAGE;
-        const paginatedData = tickets.slice(startIndex, endIndex);
+// router.post('/login', function (req, res) {
+//   const username = req.body.user;
+//   const password = req.body.password;
+//   User.findByUsername(username, function (err, user) {
+//     if (err) {
+//       req.flash('message', err.message);
+//       return res.redirect('/login');
+//     }
+//     if (!user) {
+//       req.flash('message', 'Invalid user or password');
+//       return res.redirect('/login');
+//     }
+//     User.checkPassword(password, user.password, function (err, match) {
+//       if (err) {
+//         req.flash('message', err.message);
+//         return res.redirect('/login');
+//       }
+//       if (!match) {
+//         req.flash('message', 'Invalid user or password');
+//         return res.redirect('/login');
+//       }
+//       req.session.user = { id: user.id, user: user.user };
+//       res.redirect('/index');
+//   });
+//   console.log(`login correcto ${username} con contraseña ${password}`);
+// });
+// });
 
+// router.get('/register', function (req, res) {
+//   res.render('register', { message: req.flash('message') });
+// });
 
-        res.render('tickets/index', {
-            alert: true,
-            alertTitle: "Conexión exitosa",
-            alertMessage: "¡LOGIN CORRECTO!",
-            alertIcon: 'success',
-            showConfirmButton: false,
-            timer: 700,
-            ruta: '',
-            // Pasamos la variable con el resultado de tickets al objeto que se pasa como segundo parámetro
-            // ticket1: ticket1,
-            ticket1: paginatedData,
-            pageInfo: {
-                currentPage: page,
-                totalPages: totalPages,
-                hasNextPage: endIndex < totalItems,
-                hasPreviousPage: startIndex > 0,
-                nextPage: page + 1,
-                previousPage: page - 1
-            }
-        });
-    } else {
-        if (user && password) {
-            con.query('SELECT * FROM users WHERE user = ?', [user], async (error, results, fields) => {
-                if (results.length == 0 || !(await bcrypt.compare(password, results[0].password))) {
-                    res.render('login', {
-                        alert: true,
-                        alertTitle: "Error",
-                        alertMessage: "USUARIO y/o PASSworpasswordWORD incorrectas",
-                        alertIcon: 'error',
-                        showConfirmButton: true,
-                        timer: false,
-                        ruta: 'login'
-                    });
+// router.post('/register', function (req, res) {
+//   const username = req.body.user;
+//   const password = req.body.password;
+//   User.create(username, password, function (err, user) {
+//     if (err) {
+//       req.flash('message', err.message);
+//       return res.redirect('/register');
+//     }
+//     req.session.user = { id: user.id, user: user.user };
+//     res.redirect('/');
+//   });
+// });
 
-                } else {
-                    //creamos una var de session y le asignamos true si INICIO SESSION       
-                    req.session.loggedin = true;
-                    req.session.name = results[0].name;
-                    req.session.rol = results[0].rol;
-                    res.render('login', {
-                        alert: true,
-                        alertTitle: "Conexión exitosa",
-                        alertMessage: "¡LOGIN CORRECTO!",
-                        alertIcon: 'success',
-                        showConfirmButton: false,
-                        timer: 700,
-                        ruta: ''
-                    });
-                }
-                res.end();
-            });
-        } else {
-            res.send('Please enter user and Password!');
-            res.end();
-        }
-    }
-});
-
+// router.get('/logout', function (req, res) {
+//   req.session.destroy();
+//   res.redirect('/');
+// });
 
 module.exports = router;
 

@@ -1,7 +1,6 @@
 var con = require('../config/db');
 var login = require('../model/login');
-const session = require('express-session');
-const ITEMS_PER_PAGE = 10;
+//const session = require('express-session');
 
 module.exports = {
   index: function (req, res) {
