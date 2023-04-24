@@ -119,8 +119,8 @@ module.exports = {
                     margins: {
                         top: 0.5 * 28.35,
                         bottom: 0.5 * 28.35,
-                        left: 0.5 * 28.35,
-                        right: 0.5 * 28.35
+                        left: 0.8 * 28.35,
+                        right: 0.8 * 28.35
                     }
                 });
 
@@ -139,15 +139,21 @@ module.exports = {
                     doc.text('Variedad: ' + registro[0].variedad);
                     doc.text('Clase: ' + registro[0].clase + '        Tam: ' + registro[0].tamano);
                     doc.text('Peso humedo: ___________');
-                    doc.text('Peso despalillo: __________');
+                    doc.text('Peso despalillo: ________');
+
+                    // Verificamos si hay gavillas sobrantes y las sumamos a gavillas_funda si es necesario
+                    if (i === registro[0].n_tickets - 1 && registro[0].sobrante <= 5) {
+                        registro[0].gavillas_funda += registro[0].sobrante;
+                        registro[0].sobrante = 0;
+                    }
                     doc.text('Gavillas funda:  ' + registro[0].gavillas_funda);
                     doc.text('Gavillas paca:  ' + registro[0].gavillas_paca);
                     doc.text('Maquinista: __________________');
                     doc.text('Fecha elaboración: ' + registro[0].fecha_elaboracion.toLocaleDateString('es-ES'));
                     doc.text('Prom. Gavillas:' + registro[0].prom_gavillas);
-                     // Calculamos la posición y de la imagen para que se centre verticalmente en la página
-                     const y = (doc.page.height - doc.page.margins.bottom - doc.page.margins.top - 40) / 2 + doc.page.margins.top;
-                     doc.image(png, doc.page.width - doc.page.margins.right - 60, y, { fit: [60, 40], align: 'center', valign: 'center' });
+                    // Calculamos la posición y de la imagen para que se centre verticalmente en la página
+                    const y = (doc.page.height - doc.page.margins.bottom - doc.page.margins.top - 40) / 2 + doc.page.margins.top;
+                    doc.image(png, doc.page.width - doc.page.margins.right - 60, y, { fit: [60, 40], align: 'center', valign: 'center' });
 
                     if (i === registro[0].n_tickets - 1 && registro[0].sobrante !== 0) {
                         doc.addPage();
@@ -155,7 +161,7 @@ module.exports = {
                         doc.text('Variedad: ' + registro[0].variedad);
                         doc.text('Clase: ' + registro[0].clase + '        Tam: ' + registro[0].tamano);
                         doc.text('Peso humedo: ___________');
-                        doc.text('Peso despalillo: __________');
+                        doc.text('Peso despalillo: ________');
                         doc.text('Gavillas funda:  ' + registro[0].sobrante);
                         doc.text('Gavillas paca:  ' + registro[0].gavillas_paca);
                         doc.text('Maquinista: __________________');
