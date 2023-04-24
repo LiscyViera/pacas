@@ -1,3 +1,4 @@
+const mysqlSync = require('mysql-sync');
 module.exports = {
     insertar: function (conexion, datos, funcion, res, error) {
         conexion.query('INSERT INTO users(user, name, password, rol) VALUES (?,?,?,?)',
@@ -13,7 +14,7 @@ module.exports = {
         conexion.query('SELECT * FROM prueba_db.users', (error, resultados) => {
             if (error) {
                 return funcion(error, null);
-            } else{
+            } else {
                 return funcion(null, resultados);
             }
         });
@@ -21,6 +22,5 @@ module.exports = {
 
     borrar: function(conexion, id) {
         conexion.query('DELETE FROM users WHERE id=?',[id]);
-    },
-
+    }
 }

@@ -4,7 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
-var indexRouter = require('./routes/index');
+//var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var ticketsRouter = require('./routes/tickets');
 var loginRouter = require('./routes/login');
@@ -25,11 +25,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ extended: true }));
 
-app.use(session({
-  secret: 'mysecret',
-  resave: false,
-  saveUninitialized: true
-}));
+// app.use(session({
+//   secret: 'mysecret',
+//   resave: false,
+//   saveUninitialized: true
+// }));
 
 //app.use('/', indexRouter);
 app.use('/users', usersRouter);

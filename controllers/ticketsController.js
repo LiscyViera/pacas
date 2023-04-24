@@ -11,8 +11,8 @@ module.exports = {
 
     index: function (req, res,) {
         const page = parseInt(req.query.page) || 1;
-
-        ticket.obtener(con, function (err, datos) {
+            ticket.obtener(con, function (err, datos) {
+            
             if (err) {
                 // manejar el error aquí
                 console.error(err);
@@ -86,8 +86,8 @@ module.exports = {
             }
             const text = registro[0].n_paca;
             const bcid = 'code128'; // tipo de código de barras que se generará
-            const scale = 1; // escala del código de barras
-            const height = 13; // altura del código de barras
+            const scale = 1.5; // escala del código de barras
+            const height = 14; // altura del código de barras
             const includetext = false;
             const textxalign = 'center';
 

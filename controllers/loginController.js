@@ -1,6 +1,5 @@
 var con = require('../config/db');
 var login = require('../model/login');
-//const session = require('express-session');
 
 module.exports = {
   index: function (req, res) {
@@ -17,7 +16,8 @@ module.exports = {
         console.error(err);
         return res.status(500).send('Error al insertar los datos en la base de datos');
       }
-      res.render('login/verusuarios', { title: 'Usuarios', usuario1: datos });
+      res.redirect('ver');
+      //res.render('login/verusuarios', { title: 'Usuarios', usuario1: datos });
     });
 
   },
@@ -54,8 +54,5 @@ module.exports = {
       }
     });
   }
-
-  
-
 
 }
