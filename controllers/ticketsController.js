@@ -1,4 +1,4 @@
-var con = require('../config/db');
+const {con, User} = require('../config/db');
 var ticket = require('../model/ticket');
 var barcode = require('barcode');
 const PDFDocument = require('pdfkit');

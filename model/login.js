@@ -1,8 +1,12 @@
-const mysqlSync = require('mysql-sync');
+const bcrypt = require('bcrypt');
+
 module.exports = {
-    insertar: function (conexion, datos, funcion, res, error) {
-        conexion.query('INSERT INTO users(user, name, password, rol) VALUES (?,?,?,?)',
-            [datos.user, datos.name, datos.password, datos.rol], funcion);
+    insertar: function (con, datos, funcion, res, error) {
+        // Generar el valor de hash de la contraseña
+        const hash = bcrypt.hashSync(datos.password, 10);
+
+        con.query('INSERT INTO users(user, name, password, rol) VALUES (?,?,?,?)',
+            [datos.user, datos.name, hash, datos.rol], funcion);
         if (error) {
             res.redirect('/');
             console.log(error);
@@ -10,8 +14,8 @@ module.exports = {
         }
     },
 
-    obtener: function (conexion, funcion) {
-        conexion.query('SELECT * FROM prueba_db.users', (error, resultados) => {
+    obtener: function (con, funcion) {
+        con.query('SELECT * FROM prueba_db.users', (error, resultados) => {
             if (error) {
                 return funcion(error, null);
             } else {
@@ -20,7 +24,7 @@ module.exports = {
         });
     },
 
-    borrar: function(conexion, id) {
-        conexion.query('DELETE FROM users WHERE id=?',[id]);
-    }
+    // borrar: function(con, id) {
+    //     con.query('DELETE FROM users WHERE id=?',[id]);
+    // }
 }

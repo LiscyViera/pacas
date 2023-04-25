@@ -1,4 +1,4 @@
-var con = require('../config/db');
+const {con, User} = require('../config/db');
 var login = require('../model/login');
 
 module.exports = {
@@ -36,23 +36,17 @@ module.exports = {
     });
   },
 
-  borrar: function (req, res) {
-    login.borrar(con, req.params.id, function (err, registro) {
-      if (err) {
-        return funcion(err, null);
-      } else {
-        //     if (req.session.loggedin) {		
-        res.redirect('/login/verusuarios');
-        console.log(registro);
-        res.end();
-        //     } else {
-        //         res.render('login',{
-        //             login:false,		
-        //         });				
-        //     }
+  // borrar: function (req, res) {
+  //   login.borrar(con, req.params.id, function(err, result) {
+  //     if (err) {
+  //       console.log('Error al borrar el usuario:', err);
+  //       res.status(500).send('Error al borrar el usuario');
+  //     } else {
+  //       console.log('Usuario borrado:', id);
+  //       res.redirect('/login/verusuarios');
+  //     }
+  //   });
+  // }
 
-      }
-    });
-  }
 
 }
