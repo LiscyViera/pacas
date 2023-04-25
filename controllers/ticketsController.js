@@ -118,7 +118,7 @@ module.exports = {
                     size: [7.6 * 28.35, 5 * 28.35],
                     margins: {
                         top: 0.5 * 28.35,
-                        bottom: 0.5 * 28.35,
+                        bottom: 0.3 * 28.35,
                         left: 0.8 * 28.35,
                         right: 0.8 * 28.35
                     }
@@ -151,6 +151,16 @@ module.exports = {
                     doc.text('Maquinista: __________________');
                     doc.text('Fecha elaboración: ' + registro[0].fecha_elaboracion.toLocaleDateString('es-ES'));
                     doc.text('Prom. Gavillas:' + registro[0].prom_gavillas);
+                    if(registro[0].sobrante >5){
+                        var tic = registro[0].n_tickets+1;
+                        var  ia =i+1;
+                        doc.text(ia+ '/' + tic, {align: 'center'});
+                    }else{
+                        var  ia =i+1;
+                        var tic = registro[0].n_tickets+1;
+                        doc.text(ia+ '/' + registro[0].n_tickets, {align: 'center'});
+                    }
+                    
                     // Calculamos la posición y de la imagen para que se centre verticalmente en la página
                     const y = (doc.page.height - doc.page.margins.bottom - doc.page.margins.top - 40) / 2 + doc.page.margins.top;
                     doc.image(png, doc.page.width - doc.page.margins.right - 60, y, { fit: [60, 40], align: 'center', valign: 'center' });
@@ -167,7 +177,8 @@ module.exports = {
                         doc.text('Maquinista: __________________');
                         doc.text('Fecha elaboración: ' + registro[0].fecha_elaboracion.toLocaleDateString('es-ES'));
                         doc.text('Prom. Gavillas:' + registro[0].prom_gavillas);
-
+                        var tic = registro[0].n_tickets+1;
+                        doc.text(tic+ '/' + tic, {align: 'center'});
 
                         // Calculamos la posición y de la imagen para que se centre verticalmente en la página
                         const y = (doc.page.height - doc.page.margins.bottom - doc.page.margins.top - 40) / 2 + doc.page.margins.top;
