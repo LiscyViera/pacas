@@ -2,7 +2,7 @@ const mysql = require('mysql');
 const bcrypt = require('bcrypt');
 const con = mysql.createConnection({
     host: 'localhost',
-    database: 'prueba_db',
+    database: 'ticket_gavilla',
     user: 'root',
     password: ''
 });

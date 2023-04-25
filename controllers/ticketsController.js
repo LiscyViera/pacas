@@ -135,7 +135,7 @@ module.exports = {
                     //generamos los datos de tickes
                     doc.fontSize(9);
 
-                    doc.text('N° Paca: ' + registro[0].n_paca);
+                    doc.text('N° Paca: ' + registro[0].n_paca + '   P. Capa_____');
                     doc.text('Variedad: ' + registro[0].variedad);
                     doc.text('Clase: ' + registro[0].clase + '        Tam: ' + registro[0].tamano);
                     doc.text('Peso humedo: ___________');
@@ -167,7 +167,7 @@ module.exports = {
 
                     if (i === registro[0].n_tickets - 1 && registro[0].sobrante !== 0) {
                         doc.addPage();
-                        doc.text('N° Paca: ' + registro[0].n_paca);
+                        doc.text('N° Paca: ' + registro[0].n_paca + '   P. Capa_____');
                         doc.text('Variedad: ' + registro[0].variedad);
                         doc.text('Clase: ' + registro[0].clase + '        Tam: ' + registro[0].tamano);
                         doc.text('Peso humedo: ___________');
