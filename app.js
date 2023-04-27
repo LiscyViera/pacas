@@ -25,6 +25,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ extended: true }));
 
+const PUERTO = 7000;
+app.listen(PUERTO, () =>{
+    console.log(`El servidor esta escuchando en el puerto ${PUERTO}...`);
+});
 // app.use(session({
 //   secret: 'mysecret',
 //   resave: false,
