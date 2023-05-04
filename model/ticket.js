@@ -19,10 +19,10 @@ module.exports={
     },
     insertar: function(conexion, datos, funcion) {
   
-        const n_tickets =Math.floor(datos.gavillas_paca / datos.gavillas_funda);
-        const resto = datos.gavillas_paca % datos.gavillas_funda;
-        conexion.query('INSERT INTO ticket_gavilla(n_paca, variedad, tamano, fecha_elaboracion, gavillas_funda, gavillas_paca, clase, prom_gavillas, n_tickets, sobrante) VALUES (?,?,?,?,?,?,?,?,?,?)', 
-        [datos.n_paca, datos.variedad, datos.tamano, datos.fecha_elaboracion, datos.gavillas_funda, datos.gavillas_paca, datos.clase, datos.prom_gavillas, n_tickets, resto], funcion);
+        const n_tickets =Math.floor(1 / 1);
+        const resto = datos.gavillas_paca % 1;
+        conexion.query('INSERT INTO ticket_gavilla(n_paca, variedad, tamano, fecha_elaboracion, gavillas_funda, gavillas_paca, clase, prom_gavillas, n_tickets, sobrante, hojas_gavilla) VALUES (?,?,?,?,?,?,?,?,?,?,?)', 
+        [datos.n_paca, datos.variedad, datos.tamano, datos.fecha_elaboracion, 0,datos.gavillas_paca, datos.clase, datos.prom_gavillas, n_tickets, resto, datos.hojas_gavilla], funcion);
       },
 
     returnId:function(con, id, funcion){
