@@ -1,9 +1,10 @@
-const {con, User} = require('../config/db');
+const { con, User } = require('../config/db');
 var ticket = require('../model/ticket');
 var barcode = require('barcode');
 const PDFDocument = require('pdfkit');
 const bwipjs = require('bwip-js');
-
+// Importamos el objeto infoVariedad
+const infoVariedad = require('../datos/variedad.js');
 
 const ITEMS_PER_PAGE = 10;
 
@@ -11,8 +12,8 @@ module.exports = {
 
     index: function (req, res,) {
         const page = parseInt(req.query.page) || 1;
-            ticket.obtener(con, function (err, datos) {
-            
+        ticket.obtener(con, function (err, datos) {
+
             if (err) {
                 // manejar el error aquí
                 console.error(err);
@@ -41,7 +42,9 @@ module.exports = {
         });
     },
     crear: function (req, res) {
-        res.render('tickets/crear');
+        const variedades = infoVariedad.variedad[0].Variedad;
+        res.render('tickets/crear', { variedades });
+
     },
     buscar: function (req, res) {
         res.render('tickets/buscar');
@@ -151,16 +154,16 @@ module.exports = {
                     doc.text('Maquinista: __________________');
                     doc.text('Fecha elaboración: ' + registro[0].fecha_elaboracion.toLocaleDateString('es-ES'));
                     doc.text('Prom. Gavillas:' + registro[0].prom_gavillas);
-                    if(registro[0].sobrante >5){
-                        var tic = registro[0].n_tickets+1;
-                        var  ia =i+1;
-                        doc.text(ia+ '/' + tic, {align: 'center'});
-                    }else{
-                        var  ia =i+1;
-                        var tic = registro[0].n_tickets+1;
-                        doc.text(ia+ '/' + registro[0].n_tickets, {align: 'center'});
+                    if (registro[0].sobrante > 5) {
+                        var tic = registro[0].n_tickets + 1;
+                        var ia = i + 1;
+                        doc.text(ia + '/' + tic, { align: 'center' });
+                    } else {
+                        var ia = i + 1;
+                        var tic = registro[0].n_tickets + 1;
+                        doc.text(ia + '/' + registro[0].n_tickets, { align: 'center' });
                     }
-                    
+
                     // Calculamos la posición y de la imagen para que se centre verticalmente en la página
                     const y = (doc.page.height - doc.page.margins.bottom - doc.page.margins.top - 40) / 2 + doc.page.margins.top;
                     doc.image(png, doc.page.width - doc.page.margins.right - 60, y, { fit: [60, 40], align: 'center', valign: 'center' });
@@ -177,8 +180,8 @@ module.exports = {
                         doc.text('Maquinista: __________________');
                         doc.text('Fecha elaboración: ' + registro[0].fecha_elaboracion.toLocaleDateString('es-ES'));
                         doc.text('Prom. Gavillas:' + registro[0].prom_gavillas);
-                        var tic = registro[0].n_tickets+1;
-                        doc.text(tic+ '/' + tic, {align: 'center'});
+                        var tic = registro[0].n_tickets + 1;
+                        doc.text(tic + '/' + tic, { align: 'center' });
 
                         // Calculamos la posición y de la imagen para que se centre verticalmente en la página
                         const y = (doc.page.height - doc.page.margins.bottom - doc.page.margins.top - 40) / 2 + doc.page.margins.top;
@@ -197,6 +200,15 @@ module.exports = {
             });
         });
     },
+
+    // Creamos una función que utiliza el objeto infoVariedad
+    //     mInfoVariedad: function (req, res) {
+    //     const infoVariedad = req.params.variedad;
+
+    //     res.redirect('/crear', { infoVariedad: infoVariedad });
+
+    // },
+
 
 
 }
