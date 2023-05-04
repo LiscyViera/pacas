@@ -47,7 +47,7 @@
                 </div>
                 <div class="col m-3">
                   <h3><label for="clase" class="form-label" style="font-weight:bold; font-size: 12px;">Variedad</label><br></h3>
-                  <select class="form-select" name="variedad" required>
+                  <select class="form-select" name="variedad" required style="font-size: 12px;">
                     <option value="" disabled selected>Seleccione una opción</option>
                     <% for (var i = 0; i < variedades.banda.length; i++) { %>
                       <optgroup label="Banda">
@@ -115,7 +115,48 @@
     </div>
 
 
+<script>
+  // Obtener los elementos del DOM para ambos select
+var selectClase = document.querySelector('[name="clase"]');
+var selectVariedad = document.querySelector('[name="variedad"]');
 
+// Función para mostrar/ocultar las opciones de selectVariedad
+function actualizarVariedades() {
+  // Obtener el valor seleccionado en selectClase
+  var claseSeleccionada = selectClase.value;
+
+  // Mostrar u ocultar opciones según la clase seleccionada
+  if (claseSeleccionada === 'BANDA') {
+    // Mostrar opciones de variedades.banda
+    selectVariedad.querySelectorAll('[label="Banda"]').forEach(function(optgroup) {
+      optgroup.hidden = false;
+    });
+    selectVariedad.querySelectorAll('[label="Capa"]').forEach(function(optgroup) {
+      optgroup.hidden = true;
+    });
+  } else if (claseSeleccionada === 'CAPA') {
+    // Mostrar opciones de variedades.capa
+    selectVariedad.querySelectorAll('[label="Capa"]').forEach(function(optgroup) {
+      optgroup.hidden = false;
+    });
+    selectVariedad.querySelectorAll('[label="Banda"]').forEach(function(optgroup) {
+      optgroup.hidden = true;
+    });
+  } else {
+    // Si no se seleccionó nada, ocultar todas las opciones
+    selectVariedad.querySelectorAll('optgroup').forEach(function(optgroup) {
+      optgroup.hidden = true;
+    });
+  }
+}
+
+// Ejecutar la función inicialmente para ocultar las opciones
+actualizarVariedades();
+
+// Agregar evento onchange a selectClase
+selectClase.addEventListener('change', actualizarVariedades);
+
+</script>
 </body>
 
 </html>
