@@ -42,8 +42,8 @@ module.exports = {
         });
     },
     crear: function (req, res) {
-        const variedades = infoVariedad.variedad[0].Variedad;
-        res.render('tickets/crear', { variedades });
+        const variedad = infoVariedad.variedad[0].Variedad;
+        res.render('tickets/crear', { variedad });
 
     },
     buscar: function (req, res) {

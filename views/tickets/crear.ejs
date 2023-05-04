@@ -43,12 +43,14 @@
                   <h3>
                     <label for="variedad" class="form-label"
                       style="font-weight:bold; font-size: 12px;">Variedad</label><br>
-                  </h3>
-                  <select class="form-select" name="variedad">
-                    <% for (let i = 0; i < variedades.length; i++) { %>
-                      <option value="<%= variedades[i] %>"><%= variedades[i] %></option>
-                    <% } %>
-                  </select>
+                    <select class="form-select" name="variedad" style=" font-size: 12px;">
+                      <% for (let i=0; i < variedad.length; i++) { %>
+                        <option value="<%= variedad[i].nombre %>">
+                          <%= variedad[i].nombre %>
+                        </option>
+                        <% } %>
+                    </select>
+
                 </div>
                 <div class="col m-3">
                   <h3>
@@ -63,7 +65,7 @@
                       elaboración</label><br>
                   </h3>
                   <input type="date" class="form-control" style="font-size: 12px;" name="fecha_elaboracion"
-                    style="font-size:15px;">
+                  style="font-size:15px;" value="<%= (new Date()).toISOString().substr(0,10) %>">              
                 </div>
               </div>
 
