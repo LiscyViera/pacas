@@ -42,8 +42,9 @@ module.exports = {
         });
     },
     crear: function (req, res) {
-        const variedad = infoVariedad.variedad[0].Variedad;
-        res.render('tickets/crear', { variedad });
+        const banda = infoVariedad.banda[0].Variedad;
+        const capa = infoVariedad.capa[0].variedad;
+        res.render('tickets/crear', { variedades: { banda, capa } });
 
     },
     buscar: function (req, res) {

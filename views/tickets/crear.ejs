@@ -40,23 +40,28 @@
                   <h3>
                     <label for="clase" class="form-label" style="font-weight:bold; font-size: 12px;">Clase</label><br>
                   </h3>
-                  <input type="text" class="form-control" style="font-size: 12px;" name="clase" style="font-size:15px;">
+                  <select class="form-select" name="clase" style="font-size: 12px;">
+                    <option value="CAPA">CAPA</option>
+                    <option value="BANDA">BANDA</option>
+                  </select>
                 </div>
                 <div class="col m-3">
-                  <script>
-                    const infoVariedad = require('./ruta/al/archivo/infoVariedad.js');
-                  </script>
-                  <h3>
-                    <label for="variedad" class="form-label"
-                      style="font-weight:bold; font-size: 12px;">Variedad</label><br>
-                    <select class="form-select" name="variedad" style=" font-size: 12px;">
-                      <% for (let i=0; i < variedad.length; i++) { %>
-                        <option value="<%= variedad[i].nombre %>">
-                          <%= variedad[i].nombre %>
-                        </option>
-                        <% } %>
-                    </select>
-
+                  <h3><label for="clase" class="form-label" style="font-weight:bold; font-size: 12px;">Variedad</label><br></h3>
+                  <select class="form-select" name="variedad" required>
+                    <option value="" disabled selected>Seleccione una opción</option>
+                    <% for (var i = 0; i < variedades.banda.length; i++) { %>
+                      <optgroup label="Banda">
+                        <% var variedad = variedades.banda[i]; %>
+                        <option value="<%= variedad.nombre %>"><%= variedad.nombre %></option>
+                      </optgroup>
+                    <% } %>
+                    <% for (var i = 0; i < variedades.capa.length; i++) { %>
+                      <optgroup label="Capa">
+                        <% var variedad = variedades.capa[i]; %>
+                        <option value="<%= variedad.nombre %>"><%= variedad.nombre %></option>
+                      </optgroup>
+                    <% } %>
+                  </select>
                 </div>
                 <div class="col m-3">
                   <h3>
