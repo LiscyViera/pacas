@@ -7,11 +7,6 @@ const session = require('express-session');
 const flash = require('connect-flash');
 //const User = require('../config/db');
 
-//Registro de usuarios
-router.get('/', loginController.index);
-router.get('/crear', loginController.crear);
-router.post('/users', loginController.save);
-router.get('/ver', loginController.ver);
 //router.post('/edit/:id', loginController.edit);
 //router.get('/delete/:id', loginController.borrar);
 
@@ -25,6 +20,13 @@ router.get('/delete/:id', (req, res) => {
         }
     })
 });
+
+const isAdmin = function (req, res, next) {
+  if (req.user && req.user.rol === 'Admin') {
+      return next();
+  }
+  res.redirect('/error');
+};
 
 router.use(session({
   secret: 'mysecretkey',
@@ -40,7 +42,7 @@ router.get('/login', function (req, res) {
 });
 
 router.post('/login', function (req, res) {
-  const username = req.body.user;
+  const username = req .body.user;
   const password = req.body.password;
   User.findByUsername(username, function (err, user) {
     if (err) {
@@ -68,6 +70,11 @@ router.post('/login', function (req, res) {
 });
 });
 
+//Registro de usuarios
+router.get('/', loginController.index);
+router.get('/crear', isAdmin, loginController.crear);
+router.post('/users', isAdmin, loginController.save);
+router.get('/ver', isAdmin, loginController.ver);
 // router.get('/register', function (req, res) {
 //   res.render('register', { message: req.flash('message') });
 // });

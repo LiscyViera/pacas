@@ -4,7 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
-//var indexRouter = require('./routes/index');
+var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var ticketsRouter = require('./routes/tickets');
 var loginRouter = require('./routes/login');
@@ -35,7 +35,7 @@ app.listen(PUERTO, () =>{
 //   saveUninitialized: true
 // }));
 
-//app.use('/', indexRouter);
+app.use('/error', indexRouter);
 app.use('/users', usersRouter);
 app.use('/tickets', ticketsRouter);
 app.use('/', loginRouter);
