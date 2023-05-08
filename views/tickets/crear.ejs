@@ -47,7 +47,7 @@
                 </div>
                 <div class="col m-3">
                   <h3><label for="clase" class="form-label" style="font-weight:bold; font-size: 12px;">Variedad</label><br></h3>
-                  <select class="form-select" name="variedad" required style="font-size: 12px;">
+                  <select class="form-select" name="variedad" id="variedad" required style="font-size: 12px;">
                     <option value="" disabled selected>Seleccione una opción</option>
                     <% for (var i = 0; i < variedades.banda.length; i++) { %>
                       <optgroup label="Banda">
@@ -62,6 +62,10 @@
                       </optgroup>
                     <% } %>
                   </select>
+                </div>
+                <div class="col m-3">
+                  <h3><label for="hojas_fundas" class="form-label" style="font-weight:bold; font-size: 12px;">Hojas Fundas</label><br></h3>
+                  <input type="number" class="form-control" name="hojas_fundas" id="hojas_fundas" min="0" required style="font-size: 12px;">
                 </div>
                 <div class="col m-3">
                   <h3>
@@ -157,6 +161,64 @@ actualizarVariedades();
 selectClase.addEventListener('change', actualizarVariedades);
 
 </script>
+<script>
+  $(document).ready(function() {
+    // Agregar evento change al select
+    $('#variedad').change(function() {
+      // Encontrar la variedad seleccionada en el objeto "variedades"
+      var variedadSeleccionada = null;
+      for (var i = 0; i < variedades.banda.length; i++) {
+        if (variedades.banda[i].nombre === $(this).val()) {
+          variedadSeleccionada = variedades.banda[i];
+          break;
+        }
+      }
+      if (!variedadSeleccionada) {
+        for (var i = 0; i < variedades.capa.length; i++) {
+          if (variedades.capa[i].nombre === $(this).val()) {
+            variedadSeleccionada = variedades.capa[i];
+            break;
+          }
+        }
+      }
+  
+      // Establecer el valor de "hojas_fundas" en el input correspondiente
+      if (variedadSeleccionada) {
+        $('#hojas_fundas').val(variedadSeleccionada.hojas_fundas);
+      }
+    });
+  });
+  </script>
+<script>
+ $(document).ready(function() {
+  // Agregar evento change al select
+  $('#variedad').change(function() {
+    // Encontrar la variedad seleccionada en el objeto "variedades"
+    var variedadSeleccionada = null;
+    for (var i = 0; i < variedades.banda.length; i++) {
+      if (variedades.banda[i].nombre === $(this).val()) {
+        variedadSeleccionada = variedades.banda[i];
+        break;
+      }
+    }
+    if (!variedadSeleccionada) {
+      for (var i = 0; i < variedades.capa.length; i++) {
+        if (variedades.capa[i].nombre === $(this).val()) {
+          variedadSeleccionada = variedades.capa[i];
+          break;
+        }
+      }
+    }
+
+    // Establecer el valor de "hojas_fundas" en el input correspondiente
+    if (variedadSeleccionada) {
+      $('#hojas_fundas').val(variedadSeleccionada.hojas_fundas);
+    }
+  });
+});
+
+  </script>
+
 </body>
 
 </html>

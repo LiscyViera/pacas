@@ -44,7 +44,8 @@ module.exports = {
     crear: function (req, res) {
         const banda = infoVariedad.banda[0].Variedad;
         const capa = infoVariedad.capa[0].variedad;
-        res.render('tickets/crear', { variedades: { banda, capa } });
+        const hojas_fundas = infoVariedad.banda[0].Variedad.find(variedad => variedad.nombre === 'NSA').hojas_fundas;
+        res.render('tickets/crear', { variedades: { banda, capa, hojas_fundas } });
 
     },
     buscar: function (req, res) {
